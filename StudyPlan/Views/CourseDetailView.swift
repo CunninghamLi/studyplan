@@ -6,7 +6,8 @@ struct CourseDetailView: View {
     
     var course: Course
     
-    @State private var assignmentForSheet: Assignment?
+    @State private var showNewAssignmentSheet = false
+    @State private var assignmentToEdit: Assignment? = nil
     @StateObject private var viewModel = CourseDetailViewModel()
     
     var body: some View {
@@ -15,8 +16,8 @@ struct CourseDetailView: View {
             
             ForEach(assignments) { assignment in
                 Button {
-                    // Open existing assignment in sheet
-                    assignmentForSheet = assignment
+                    // Edit existing assignment
+                    assignmentToEdit = assignment
                 } label: {
                     HStack {
                         VStack(alignment: .leading) {
@@ -55,23 +56,20 @@ struct CourseDetailView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    // Create a new assignment linked to this course, then open it
-                    let newAssignment = Assignment(
-                        title: "",
-                        dueDate: .now,
-                        status: .notStarted,
-                        notes: "",
-                        course: course
-                    )
-                    context.insert(newAssignment)
-                    assignmentForSheet = newAssignment
+                    // Open sheet to create a brand new assignment
+                    showNewAssignmentSheet = true
                 } label: {
                     Image(systemName: "plus.circle.fill")
                 }
             }
         }
-        .sheet(item: $assignmentForSheet) { assignment in
-            AssignmentEditView(assignment: assignment)
+        // Sheet for creating a new assignment
+        .sheet(isPresented: $showNewAssignmentSheet) {
+            AssignmentEditView(course: course)
+        }
+        // Sheet for editing an existing assignment
+        .sheet(item: $assignmentToEdit) { assignment in
+            AssignmentEditView(existingAssignment: assignment, course: course)
         }
     }
 }
