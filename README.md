@@ -69,23 +69,32 @@ StudyPlan is a simple SwiftUI + SwiftData application designed to help students 
 
 ## Project Structure
 
+```
 StudyPlan
 ├── StudyPlanApp.swift
 ├── ContentView.swift
+
 ├── Models
-│ ├── Course.swift
-│ ├── Assignment.swift
-│ └── AssignmentStatus.swift
+│   ├── Course.swift
+│   ├── Assignment.swift
+│   └── AssignmentStatus.swift
+
 ├── ViewModels
-│ ├── CourseListViewModel.swift
-│ ├── CourseDetailViewModel.swift
-│ └── TodayViewModel.swift
+│   ├── CourseListViewModel.swift
+│   ├── CourseDetailViewModel.swift
+│   └── TodayViewModel.swift
+
 ├── Views
-│ ├── TodayView.swift
-│ ├── CourseListView.swift
-│ ├── CourseDetailView.swift
-│ ├── AssignmentEditView.swift
-│ └── CourseEditView.swift
+│   ├── TodayView.swift
+│   ├── CourseListView.swift
+│   ├── CourseDetailView.swift
+│   ├── AssignmentEditView.swift
+│   └── CourseEditView.swift
+
+└── Utils
+    ├── Color+Hex.swift
+    └── Date+Helpers.swift
+```
 
 ---
 
