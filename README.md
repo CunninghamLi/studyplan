@@ -91,9 +91,6 @@ StudyPlan
 │   ├── AssignmentEditView.swift
 │   └── CourseEditView.swift
 
-└── Utils
-    ├── Color+Hex.swift
-    └── Date+Helpers.swift
 ```
 
 ---
