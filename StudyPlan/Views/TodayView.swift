@@ -7,11 +7,14 @@ struct TodayView: View {
     
     @StateObject private var viewModel = TodayViewModel()
     
+    // Assignment selected from the list to view details
+    @State private var assignmentToView: Assignment?
+    
     var body: some View {
         let upcoming = viewModel.upcomingAssignments(from: allAssignments)
         
         VStack {
-            // Calendar-style date picker
+            // Calendar style date picker
             DatePicker(
                 "From date",
                 selection: $viewModel.selectedDate,
@@ -20,7 +23,7 @@ struct TodayView: View {
             .datePickerStyle(.graphical)
             .padding(.horizontal)
             
-            // Status filter button
+            // Status filter menu
             HStack {
                 Menu {
                     Button("All statuses") {
@@ -47,40 +50,50 @@ struct TodayView: View {
                         .foregroundColor(.secondary)
                 } else {
                     ForEach(upcoming) { assignment in
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(assignment.title)
-                                    .font(.headline)
-                                
-                                if let course = assignment.course {
-                                    Text(course.code)
-                                        .font(.subheadline)
+                        Button {
+                            // When tapping the row, show details in a sheet
+                            assignmentToView = assignment
+                        } label: {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(assignment.title)
+                                        .font(.headline)
+                                    
+                                    if let course = assignment.course {
+                                        Text(course.code)
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    
+                                    Text(assignment.dueDate, style: .date)
+                                        .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
                                 
-                                Text(assignment.dueDate, style: .date)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                                Spacer()
+                                
+                                Button {
+                                    viewModel.toggleStatus(for: assignment)
+                                } label: {
+                                    Text(assignment.status.rawValue)
+                                        .font(.caption2)
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
+                                        .background(Color.blue.opacity(0.15))
+                                        .cornerRadius(8)
+                                }
+                                .buttonStyle(.plain)
                             }
-                            
-                            Spacer()
-                            
-                            Button {
-                                viewModel.toggleStatus(for: assignment)
-                            } label: {
-                                Text(assignment.status.rawValue)
-                                    .font(.caption2)
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 4)
-                                    .background(Color.blue.opacity(0.15))
-                                    .cornerRadius(8)
-                            }
-                            .buttonStyle(.plain)
                         }
+                        .buttonStyle(.plain)
                     }
                 }
             }
         }
         .navigationTitle("Upcoming")
+        // Sheet that shows details for the selected assignment
+        .sheet(item: $assignmentToView) { assignment in
+            AssignmentEditView(existingAssignment: assignment, course: assignment.course)
+        }
     }
 }
