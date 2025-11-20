@@ -115,7 +115,7 @@ StudyPlan
 
 ---
 
-## Future Improvements (Optional)
+## Future Improvements
 
 - Notifications for upcoming deadlines  
 - Course color picker UI  
